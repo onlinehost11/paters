@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paters Group - A Ministry of Fellowship & Growth</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-cross"></i>
+                <span>Paters Group</span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="index.html" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="pages/cells.html" class="nav-link">Cells</a></li>
+                <li class="nav-item"><a href="pages/events.html" class="nav-link">Events</a></li>
+                <li class="nav-item"><a href="pages/about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="pages/rhapsody.html" class="nav-link">Rhapsody</a></li>
+                <li class="nav-item"><a href="pages/admin.html" class="nav-link">Admin</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Welcome to Paters Group</h1>
+            <p class="hero-subtitle">A Ministry of Fellowship, Growth & Spiritual Excellence</p>
+            <button class="btn btn-primary" onclick="document.getElementById('about-section').scrollIntoView({behavior: 'smooth'})">
+                Learn More
+            </button>
+        </div>
+    </section>
+
+    <!-- Daily Scripture Section -->
+    <section class="daily-scripture">
+        <div class="container">
+            <div class="scripture-card">
+                <div class="scripture-header">
+                    <i class="fas fa-book"></i>
+                    <h2>Daily Scripture</h2>
+                </div>
+                <p class="scripture-text" id="dailyScripture">
+                    "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."
+                </p>
+                <p class="scripture-ref">John 3:16</p>
+                <small class="scripture-date" id="scriptureDate"></small>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about-section">
+        <div class="container">
+            <h2 class="section-title">About Paters Group</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        Paters Group is a vibrant Christian ministry dedicated to fostering fellowship, spiritual growth, and Christ-centered community. We believe in the power of small groups to transform lives and strengthen faith through authentic relationships and God's
+                        Word.
+                    </p>
+                    <p>
+                        Our mission is to create a welcoming space where believers come together to worship, learn, serve, and grow closer to God and each other. Through our various cells and activities, we aim to be a beacon of hope and light in our community.
+                    </p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-card">
+                        <h3 id="memberCount">250+</h3>
+                        <p>Active Members</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="cellCount">15</h3>
+                        <p>Active Cells</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>52</h3>
+                        <p>Years of Service</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Events Section -->
+    <section class="latest-events">
+        <div class="container">
+            <h2 class="section-title">Upcoming Events</h2>
+            <div class="events-grid" id="upcomingEventsHome">
+                <!-- Events loaded dynamically -->
+                <div class="event-card">
+                    <div class="event-date">Mar 10</div>
+                    <h3>Sunday Worship Service</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Main Hall</p>
+                    <p class="event-desc">Join us for an inspiring worship session with powerful messages from our Man of God.</p>
+                </div>
+            </div>
+            <div class="center-btn">
+                <a href="pages/events.html" class="btn btn-secondary">View All Events</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Be Part of Our Growing Community</h2>
+            <p>Join a cell group and experience the power of authentic Christian community</p>
+            <a href="pages/cells.html" class="btn btn-light">Explore Our Cells</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-section">
+                        <h4><i class="fas fa-cross"></i> Paters Group</h4>
+                        <p>A Ministry of Fellowship & Growth</p>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="pages/cells.html">Cells</a></li>
+                            <li><a href="pages/events.html">Events</a></li>
+                            <li><a href="pages/about.html">About</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Contact Us</h4>
+                        <p>Email: info@patersgroup.com</p>
+                        <p>Phone: +1 (555) 123-4567</p>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Follow Us</h4>
+                        <div class="social-links">
+                            <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                            <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Paters Group. All Rights Reserved. | Designed with <i class="fas fa-heart"></i> for God's Kingdom</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>

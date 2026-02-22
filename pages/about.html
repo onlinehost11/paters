@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Paters Group</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .page-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        .about-content {
+            padding: 3rem 0;
+        }
+        
+        .content-section {
+            margin-bottom: 4rem;
+        }
+        
+        .section-heading {
+            font-size: 2rem;
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .section-heading i {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+        }
+        
+        .section-text {
+            color: #555;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+        
+        .section-text p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .value-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border-top: 4px solid var(--primary-color);
+            transition: var(--transition);
+        }
+        
+        .value-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(196, 96, 79, 0.2);
+        }
+        
+        .value-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .value-card h3 {
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .value-card p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .leadership-section {
+            margin-top: 3rem;
+        }
+        
+        .leadership-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .leader-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .leader-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(196, 96, 79, 0.2);
+        }
+        
+        .leader-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+        
+        .leader-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .leader-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 0.3rem;
+        }
+        
+        .leader-position {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+        
+        .leader-bio {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .milestone-section {
+            background: linear-gradient(135deg, #faf7f3 0%, #f5f1ee 100%);
+            padding: 3rem 0;
+            margin-top: 3rem;
+        }
+        
+        .milestones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .milestone {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .milestone-year {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .milestone-text {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        /* Vision Statement */
+        
+        .vision-box {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 12px;
+            margin: 3rem 0;
+            text-align: center;
+        }
+        
+        .vision-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .vision-box p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+        
+        @media (max-width: 768px) {
+            .page-hero h1 {
+                font-size: 2rem;
+            }
+            .section-heading {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .leadership-grid,
+            .values-grid,
+            .milestones {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-cross"></i>
+                <span>Paters Group</span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="../index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="cells.html" class="nav-link">Cells</a></li>
+                <li class="nav-item"><a href="events.html" class="nav-link">Events</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link active">About</a></li>
+                <li class="nav-item"><a href="rhapsody.html" class="nav-link">Rhapsody</a></li>
+                <li class="nav-item"><a href="admin.html" class="nav-link">Admin</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <h1><i class="fas fa-info-circle"></i> About Paters Group</h1>
+            <p>Discover our mission, values, and the people behind the ministry</p>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="about-content">
+        <div class="container">
+            <!-- History Section -->
+            <div class="content-section">
+                <div class="section-heading">
+                    <i class="fas fa-history"></i>
+                    <span>Our History</span>
+                </div>
+                <div class="section-text">
+                    <p>
+                        Paters Group was established in 1973 as a visionary response to the need for authentic Christian community and spiritual growth. What began as a small prayer circle has blossomed into a vibrant ministry touching hundreds of lives across our region.
+                    </p>
+                    <p>
+                        Over the past five decades, our ministry has remained steadfast in our commitment to exalt Christ, equip believers, and empower communities with the transformative message of the Gospel. Through the faithfulness of God and dedication of our members, Paters
+                        Group has grown into a beacon of hope and spiritual excellence.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Mission & Vision -->
+            <div class="vision-box">
+                <h3><i class="fas fa-bullseye"></i> Our Mission</h3>
+                <p>
+                    To create a community of authentic believers who worship God wholeheartedly, grow in Christ-likeness, serve their communities with excellence, and impact the world for the Kingdom of God.
+                </p>
+            </div>
+
+            <!-- Core Values -->
+            <div class="content-section">
+                <div class="section-heading">
+                    <i class="fas fa-heart"></i>
+                    <span>Core Values</span>
+                </div>
+                <div class="values-grid">
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fas fa-cross"></i></div>
+                        <h3>Christ-Centered</h3>
+                        <p>Jesus Christ is the center of all we do. We believe in His resurrection power and transformative grace.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fas fa-users"></i></div>
+                        <h3>Community</h3>
+                        <p>We believe in the power of authentic relationships, mutual support, and genuine Christian fellowship.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fas fa-book"></i></div>
+                        <h3>Biblical Foundation</h3>
+                        <p>God's Word is our guide. We believe in the authority and relevance of Scripture for today's challenges.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fas fa-sparkles"></i></div>
+                        <h3>Excellence</h3>
+                        <p>We pursue excellence in all endeavors as an act of worship and service to our Lord.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                        <h3>Service</h3>
+                        <p>We are called to serve with compassion, reaching the marginalized and lifting the downtrodden.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fas fa-dove"></i></div>
+                        <h3>Spiritual Growth</h3>
+                        <p>We are committed to continuous spiritual development and discipleship at every level.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leadership Section -->
+            <div class="content-section leadership-section">
+                <div class="section-heading">
+                    <i class="fas fa-crown"></i>
+                    <span>Our Leadership</span>
+                </div>
+                <div class="leadership-grid">
+                    <div class="leader-card">
+                        <div class="leader-image">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="leader-info">
+                            <div class="leader-name">Dr. Olubunmi Adekunle</div>
+                            <div class="leader-position">Man of God / Senior Pastor</div>
+                            <div class="leader-bio">
+                                With over 35 years of ministry experience, Dr. Adekunle is the visionary shepherd of Paters Group, known for profound biblical teaching and pastoral excellence.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="leader-card">
+                        <div class="leader-image">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="leader-info">
+                            <div class="leader-name">Pastor Ejiro Okoro</div>
+                            <div class="leader-position">Deputy Leader / Discipleship</div>
+                            <div class="leader-bio">
+                                Passionate about discipleship and spiritual mentoring, Pastor Okoro leads our cell group network and ensures effective spiritual formation.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="leader-card">
+                        <div class="leader-image">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="leader-info">
+                            <div class="leader-name">Minister Amara Okafor</div>
+                            <div class="leader-position">Missions & Outreach Director</div>
+                            <div class="leader-bio">
+                                Minister Okafor coordinates our community engagement and missions work, ensuring we impact our society with the love of Christ.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Milestones Section -->
+            <section class="milestone-section">
+                <div class="container">
+                    <h2 class="section-heading">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Ministry Milestones</span>
+                    </h2>
+                    <div class="milestones">
+                        <div class="milestone">
+                            <div class="milestone-year">1973</div>
+                            <div class="milestone-text">Ministry Founded</div>
+                        </div>
+                        <div class="milestone">
+                            <div class="milestone-year">1985</div>
+                            <div class="milestone-text">First Cell Groups Established</div>
+                        </div>
+                        <div class="milestone">
+                            <div class="milestone-year">2000</div>
+                            <div class="milestone-text">Expanded to 5 Zones</div>
+                        </div>
+                        <div class="milestone">
+                            <div class="milestone-year">2010</div>
+                            <div class="milestone-text">250+ Members Milestone</div>
+                        </div>
+                        <div class="milestone">
+                            <div class="milestone-year">2020</div>
+                            <div class="milestone-text">Digital Ministry Platform Launch</div>
+                        </div>
+                        <div class="milestone">
+                            <div class="milestone-year">2025</div>
+                            <div class="milestone-text">New Website Launch</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-section">
+                        <h4><i class="fas fa-cross"></i> Paters Group</h4>
+                        <p>A Ministry of Fellowship & Growth</p>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="../index.html">Home</a></li>
+                            <li><a href="cells.html">Cells</a></li>
+                            <li><a href="events.html">Events</a></li>
+                            <li><a href="about.html">About</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Contact Us</h4>
+                        <p>Email: info@patersgroup.com</p>
+                        <p>Phone: +1 (555) 123-4567</p>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Follow Us</h4>
+                        <div class="social-links">
+                            <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                            <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Paters Group. All Rights Reserved. | Designed with <i class="fas fa-heart"></i> for God's Kingdom</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+
+</html>
