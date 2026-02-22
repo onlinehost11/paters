@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Paters Group</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplemde@1.11.2/dist/simplemde.min.css">
+    <style>
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 0;
+            min-height: 100vh;
+            background: #f5f5f5;
+        }
+        
+        .dashboard-sidebar {
+            background: linear-gradient(135deg, var(--dark-color) 0%, #1a2332 100%);
+            color: white;
+            padding: 2rem 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+        
+        .dashboard-logo {
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-logo h3 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 2rem;
+            color: #ccc;
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+            cursor: pointer;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left-color: var(--primary-color);
+        }
+        
+        .sidebar-menu i {
+            margin-right: 0.5rem;
+            width: 20px;
+        }
+        
+        .dashboard-content {
+            margin-left: 250px;
+            padding: 2rem;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+        
+        .header-title h1 {
+            margin: 0 0 0.5rem 0;
+            color: var(--dark-color);
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .theme-toggle {
+            background: var(--accent-color);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            color: #666;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .form-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(196, 96, 79, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(196, 96, 79, 0.3);
+        }
+        
+        .btn-reset {
+            background: #e8e8e8;
+            color: var(--dark-color);
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .data-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .table-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            font-weight: 600;
+        }
+        
+        .table-row {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e0d5d0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .table-row:last-child {
+            border-bottom: none;
+        }
+        
+        .table-row:hover {
+            background: #faf8f7;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-action {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        
+        .btn-edit {
+            background: var(--gold-color);
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-action:hover {
+            transform: translateY(-2px);
+            opacity: 0.8;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .alert.show {
+            display: block;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-sidebar {
+                position: fixed;
+                left: -250px;
+                transition: var(--transition);
+            }
+            .dashboard-sidebar.open {
+                left: 0;
+            }
+            .dashboard-content {
+                margin-left: 0;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .table-header,
+            .table-row {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 1rem;
+            }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .close-btn:hover {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="dashboard-sidebar">
+        <div class="dashboard-logo">
+            <h3><i class="fas fa-cross"></i> Admin</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#" onclick="showSection('dashboard')" class="menu-item active"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+            <li><a href="#" onclick="showSection('events')" class="menu-item"><i class="fas fa-calendar-alt"></i> Events</a></li>
+            <li><a href="#" onclick="showSection('groups')" class="menu-item"><i class="fas fa-users"></i> Groups</a></li>
+            <li><a href="#" onclick="showSection('devotionals')" class="menu-item"><i class="fas fa-book"></i> Devotionals</a></li>
+            <li><a href="#" onclick="logout()" class="menu-item"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-content">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="header-title">
+                <h1 id="pageTitle">Dashboard</h1>
+                <p id="pageSubtitle">Welcome to Paters Group Administration</p>
+            </div>
+            <div class="header-actions">
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-moon"></i> Dark Mode
+                </button>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="eventCount">0</div>
+                    <div class="stat-label">Total Events</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="groupCount">0</div>
+                    <div class="stat-label">Cell Groups</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="devotionalCount">0</div>
+                    <div class="stat-label">Devotionals</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalMembers">0</div>
+                    <div class="stat-label">Total Members</div>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h3><i class="fas fa-info-circle"></i> Welcome to Admin Dashboard</h3>
+                <p>You have full access to manage all content for Paters Group. Use the menu to:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>Create, edit, and delete events</li>
+                    <li>Manage cell groups and members</li>
+                    <li>Post devotional messages with media</li>
+                    <li>View analytics and statistics</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events" class="content-section">
+            <div class="form-card">
+                <h2>Add New Event</h2>
+                <div id="eventAlert" class="alert"></div>
+                <form id="eventForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventTitle">Event Title *</label>
+                            <input type="text" id="eventTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventDate">Date *</label>
+                            <input type="date" id="eventDate" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="eventTime">Time *</label>
+                            <input type="time" id="eventTime" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventType">Type *</label>
+                            <select id="eventType" required>
+                                <option value="">-- Select --</option>
+                                <option value="upcoming">Upcoming</option>
+                                <option value="past">Past</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="eventLocation">Location *</label>
+                            <input type="text" id="eventLocation" required>
+                        </div>
+                    </div>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="eventDescription">Description *</label>
+                            <textarea id="eventDescription" required></textarea>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn-submit">Add Event</button>
+                        <button type="reset" class="btn-reset">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+            <h2 style="margin-top: 2rem; color: var(--dark-color);">All Events</h2>
+            <div id="eventsList" class="data-table"></div>
+        </section>
+
+        <!-- Groups Section -->
+        <section id="groups" class="content-section">
+            <div class="form-card">
+                <h2>Add New Group</h2>
+                <div id="groupAlert" class="alert"></div>
+                <form id="groupForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="groupName">Group Name *</label>
+                            <input type="text" id="groupName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="groupLeader">Leader Name *</label>
+                            <input type="text" id="groupLeader" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="groupLocation">Location *</label>
+                            <input type="text" id="groupLocation" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="groupMeeting">Meeting Time *</label>
+                            <input type="text" id="groupMeeting" placeholder="e.g., Tuesday, 7 PM" required>
+                        </div>
+                    </div>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="groupDescription">Description *</label>
+                            <textarea id="groupDescription" required></textarea>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn-submit">Add Group</button>
+                        <button type="reset" class="btn-reset">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+            <h2 style="margin-top: 2rem; color: var(--dark-color);">All Groups</h2>
+            <div id="groupsList" class="data-table"></div>
+        </section>
+
+        <!-- Devotionals Section -->
+        <section id="devotionals" class="content-section">
+            <div class="form-card">
+                <h2>Post New Devotional</h2>
+                <div id="devotionalAlert" class="alert"></div>
+                <form id="devotionalForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="devTitle">Title *</label>
+                            <input type="text" id="devTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="devDate">Date *</label>
+                            <input type="date" id="devDate" required>
+                        </div>
+                    </div>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="devScripture">Scripture *</label>
+                            <input type="text" id="devScripture" placeholder="e.g., John 3:16" required>
+                        </div>
+                    </div>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="devMessage">Message *</label>
+                            <textarea id="devMessage" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="devAuthor">Author</label>
+                            <input type="text" id="devAuthor" value="Man of God">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="devImage">Image</label>
+                            <input type="file" id="devImage" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label for="devAudio">Audio Message</label>
+                            <input type="file" id="devAudio" accept="audio/*">
+                        </div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="submit" class="btn-submit">Post Devotional</button>
+                        <button type="reset" class="btn-reset">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+            <h2 style="margin-top: 2rem; color: var(--dark-color);">All Devotionals</h2>
+            <div id="devotionalsList" class="data-table"></div>
+        </section>
+    </div>
+
+    <script type="module">
+        import { AuthAPI, EventsAPI, GroupsAPI, RhapsodyAPI, getToken, clearToken } from '../js/api.js'; // Check authentication window.addEventListener('load', () => { const token = getToken(); if (!token) { window.location.href = 'admin-login.html'; return;
+        } loadDashboard(); setupEventForm(); setupGroupForm(); setupDevotionalForm(); }); // Show section window.showSection = function(sectionId) { document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active')); document.getElementById(sectionId).classList.add('active');
+        document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active')); event.target.closest('.menu-item').classList.add('active'); // Update header const titles = { dashboard: 'Dashboard', events: 'Manage Events', groups: 'Manage
+        Groups', devotionals: 'Post Devotionals' }; document.getElementById('pageTitle').textContent = titles[sectionId]; // Load data when switching sections if (sectionId === 'events') loadEvents(); if (sectionId === 'groups') loadGroups(); if (sectionId
+        === 'devotionals') loadDevotionals(); }; // Load dashboard async function loadDashboard() { try { const [events, groups, devotionals] = await Promise.all([ EventsAPI.getAll(null, null, 1, 1000), GroupsAPI.getAll(null, 1, 1000), RhapsodyAPI.getAll(null,
+        1, 1000) ]); document.getElementById('eventCount').textContent = events.pagination.total; document.getElementById('groupCount').textContent = groups.pagination.total; document.getElementById('devotionalCount').textContent = devotionals.pagination.total;
+        // Calculate total members const totalMembers = groups.data.reduce((sum, g) => sum + (g.memberCount || 0), 0); document.getElementById('totalMembers').textContent = totalMembers; } catch (error) { console.error('Dashboard load error:', error);
+        } } // Events function setupEventForm() { document.getElementById('eventForm').addEventListener('submit', async (e) => { e.preventDefault(); try { await EventsAPI.create({ title: document.getElementById('eventTitle').value, date: document.getElementById('eventDate').value,
+        time: document.getElementById('eventTime').value, location: document.getElementById('eventLocation').value, description: document.getElementById('eventDescription').value, type: document.getElementById('eventType').value }); showAlert('eventAlert',
+        'Event created successfully!', 'success'); e.target.reset(); loadEvents(); loadDashboard(); } catch (error) { showAlert('eventAlert', error.message, 'error'); } }); } async function loadEvents() { try { const response = await EventsAPI.getAll(null,
+        null, 1, 100); const container = document.getElementById('eventsList'); if (response.data.length === 0) { container.innerHTML = `
+        <div class="empty-state"><i class="fas fa-inbox"></i>
+            <p>No events yet</p>
+        </div>`; return; } container.innerHTML = `
+        <div class="table-header">
+            <div>Title</div>
+            <div>Date</div>
+            <div>Location</div>
+            <div>Type</div>
+            <div>Actions</div>
+        </div>
+        ${response.data.map(event => `
+        <div class="table-row">
+            <div>${event.title}</div>
+            <div>${new Date(event.date).toLocaleDateString()}</div>
+            <div>${event.location}</div>
+            <div><strong>${event.type}</strong></div>
+            <div class="actions">
+                <button class="btn-action btn-delete" onclick="deleteEvent('${event._id}')">Delete</button>
+            </div>
+        </div>
+        `).join('')} `; } catch (error) { console.error('Load events error:', error); } } window.deleteEvent = async function(id) { if (confirm('Delete this event?')) { try { await EventsAPI.delete(id); showAlert('eventAlert', 'Event deleted successfully!', 'success');
+        loadEvents(); loadDashboard(); } catch (error) { showAlert('eventAlert', error.message, 'error'); } } }; // Groups function setupGroupForm() { document.getElementById('groupForm').addEventListener('submit', async (e) => { e.preventDefault(); try
+        { await GroupsAPI.create({ name: document.getElementById('groupName').value, leader: document.getElementById('groupLeader').value, location: document.getElementById('groupLocation').value, meetingTime: document.getElementById('groupMeeting').value,
+        description: document.getElementById('groupDescription').value }); showAlert('groupAlert', 'Group created successfully!', 'success'); e.target.reset(); loadGroups(); loadDashboard(); } catch (error) { showAlert('groupAlert', error.message, 'error');
+        } }); } async function loadGroups() { try { const response = await GroupsAPI.getAll(null, 1, 100); const container = document.getElementById('groupsList'); if (response.data.length === 0) { container.innerHTML = `
+        <div class="empty-state"><i class="fas fa-users"></i>
+            <p>No groups yet</p>
+        </div>`; return; } container.innerHTML = `
+        <div class="table-header">
+            <div>Name</div>
+            <div>Leader</div>
+            <div>Location</div>
+            <div>Members</div>
+            <div>Actions</div>
+        </div>
+        ${response.data.map(group => `
+        <div class="table-row">
+            <div>${group.name}</div>
+            <div>${group.leader}</div>
+            <div>${group.location}</div>
+            <div>${group.memberCount || 0}</div>
+            <div class="actions">
+                <button class="btn-action btn-delete" onclick="deleteGroup('${group._id}')">Delete</button>
+            </div>
+        </div>
+        `).join('')} `; } catch (error) { console.error('Load groups error:', error); } } window.deleteGroup = async function(id) { if (confirm('Delete this group?')) { try { await GroupsAPI.delete(id); showAlert('groupAlert', 'Group deleted successfully!', 'success');
+        loadGroups(); loadDashboard(); } catch (error) { showAlert('groupAlert', error.message, 'error'); } } }; // Devotionals function setupDevotionalForm() { document.getElementById('devotionalForm').addEventListener('submit', async (e) => { e.preventDefault();
+        try { const formData = new FormData(); formData.append('title', document.getElementById('devTitle').value); formData.append('scripture', document.getElementById('devScripture').value); formData.append('message', document.getElementById('devMessage').value);
+        formData.append('author', document.getElementById('devAuthor').value); if (document.getElementById('devImage').files[0]) { formData.append('image', document.getElementById('devImage').files[0]); } if (document.getElementById('devAudio').files[0])
+        { formData.append('audio', document.getElementById('devAudio').files[0]); } await RhapsodyAPI.create(formData); showAlert('devotionalAlert', 'Devotional posted successfully!', 'success'); e.target.reset(); loadDevotionals(); loadDashboard(); }
+        catch (error) { showAlert('devotionalAlert', error.message, 'error'); } }); } async function loadDevotionals() { try { const response = await RhapsodyAPI.getAll(null, 1, 100); const container = document.getElementById('devotionalsList'); if (response.data.length
+        === 0) { container.innerHTML = `
+        <div class="empty-state"><i class="fas fa-book"></i>
+            <p>No devotionals yet</p>
+        </div>`; return; } container.innerHTML = `
+        <div class="table-header">
+            <div>Title</div>
+            <div>Scripture</div>
+            <div>Date</div>
+            <div>Actions</div>
+        </div>
+        ${response.data.map(dev => `
+        <div class="table-row">
+            <div>${dev.title}</div>
+            <div>${dev.scripture}</div>
+            <div>${new Date(dev.date).toLocaleDateString()}</div>
+            <div class="actions">
+                <button class="btn-action btn-delete" onclick="deleteDevotion al('${dev._id}')">Delete</button>
+            </div>
+        </div>
+        `).join('')} `; } catch (error) { console.error('Load devotionals error:', error); } } window.deleteDevotional = async function(id) { if (confirm('Delete this devotional?')) { try { await RhapsodyAPI.delete(id); showAlert('devotionalAlert', 'Devotional
+        deleted successfully!', 'success'); loadDevotionals(); loadDashboard(); } catch (error) { showAlert('devotionalAlert', error.message, 'error'); } } }; // Utilities function showAlert(elementId, message, type) { const alert = document.getElementById(elementId);
+        alert.className = `alert show alert-${type}`; alert.textContent = message; setTimeout(() => alert.classList.remove('show'), 4000); } window.logout = function() { clearToken(); window.location.href = 'admin-login.html'; }; window.toggleTheme =
+        function() { document.body.classList.toggle('dark-mode'); };
+    </script>
+</body>
+
+</html>
