@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import { connectDB } from './config/database.js';
+import firebaseApp from './config/firebase.js';
 import authRoutes from './routes/auth.js';
 import eventRoutes from './routes/events.js';
 import groupRoutes from './routes/groups.js';
