@@ -186,12 +186,15 @@
     </div>
 
     <script type="module">
-        import { AuthAPI, setToken } from '../js/api.js'; const loginForm = document.getElementById('loginForm'); const alertBox = document.getElementById('alertBox'); const loginBtn = document.getElementById('loginBtn'); const btnText = document.getElementById('btnText');
-        loginForm.addEventListener('submit', async (e) => { e.preventDefault(); const email = document.getElementById('email').value; const password = document.getElementById('password').value; // Disable button loginBtn.disabled = true; btnText.innerHTML
-        = '<span class="spinner"></span>Logging in...'; try { const response = await AuthAPI.login(email, password); // Store token and user data setToken(response.token); localStorage.setItem('user_data', JSON.stringify(response.user)); // Show
-        success message showAlert('Login successful! Redirecting...', 'success'); // Redirect to admin dashboard setTimeout(() => { window.location.href = 'admin-dashboard.html'; }, 1500); } catch (error) { showAlert(error.message || 'Login failed. Please
-        try again.', 'danger'); loginBtn.disabled = false; btnText.textContent = 'Login'; } }); function showAlert(message, type) { alertBox.className = `alert show alert-${type}`; alertBox.textContent = message; } // Check if already logged in window.addEventListener('load',
-        () => { const token = localStorage.getItem('auth_token'); if (token) { window.location.href = 'admin-dashboard.html'; } });
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"; import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"; // Firebase configuration const firebaseConfig
+        = { apiKey: "AIzaSyDqzK38p9dG5YriZz3y66yDrmNjSeyGSas", authDomain: "paters-group.firebaseapp.com", projectId: "paters-group", storageBucket: "paters-group.firebasestorage.app", messagingSenderId: "548925676619", appId: "1:548925676619:web:b1ea6edb5d0f12c49641ce",
+        measurementId: "G-7QQ4M1CSWZ" }; // Initialize Firebase const firebaseApp = initializeApp(firebaseConfig); const auth = getAuth(firebaseApp); // DOM Elements const loginForm = document.getElementById('loginForm'); const alertBox = document.getElementById('alertBox');
+        const loginBtn = document.getElementById('loginBtn'); const btnText = document.getElementById('btnText'); // Login handler loginForm.addEventListener('submit', async (e) => { e.preventDefault(); const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value; // Disable button loginBtn.disabled = true; btnText.innerHTML = '<span class="spinner"></span>Logging in...'; try { const userCredential = await signInWithEmailAndPassword(auth,
+        email, password); const user = userCredential.user; // Store user info in localStorage localStorage.setItem('auth_token', await user.getIdToken()); localStorage.setItem('user_data', JSON.stringify({ id: user.uid, email: user.email, name: user.displayName
+        || 'Admin User' })); // Show success message showAlert('Login successful! Redirecting...', 'success'); // Redirect to admin dashboard setTimeout(() => { window.location.href = 'admin-dashboard.html'; }, 1500); } catch (error) { showAlert(error.message
+        || 'Login failed. Please try again.', 'danger'); loginBtn.disabled = false; btnText.textContent = 'Login'; } }); // Show alert messages function showAlert(message, type) { alertBox.className = `alert show alert-${type}`; alertBox.textContent =
+        message; } // Check if already logged in window.addEventListener('load', () => { const token = localStorage.getItem('auth_token'); if (token) { window.location.href = 'admin-dashboard.html'; } });
     </script>
 </body>
 

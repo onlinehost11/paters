@@ -648,70 +648,21 @@
     </div>
 
     <script type="module">
-        import { AuthAPI, EventsAPI, GroupsAPI, RhapsodyAPI, getToken, clearToken } from '../js/api.js'; // Check authentication window.addEventListener('load', () => { const token = getToken(); if (!token) { window.location.href = 'admin-login.html'; return;
-        } loadDashboard(); setupEventForm(); setupGroupForm(); setupDevotionalForm(); }); // Show section window.showSection = function(sectionId) { document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active')); document.getElementById(sectionId).classList.add('active');
-        document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active')); event.target.closest('.menu-item').classList.add('active'); // Update header const titles = { dashboard: 'Dashboard', events: 'Manage Events', groups: 'Manage
-        Groups', devotionals: 'Post Devotionals' }; document.getElementById('pageTitle').textContent = titles[sectionId]; // Load data when switching sections if (sectionId === 'events') loadEvents(); if (sectionId === 'groups') loadGroups(); if (sectionId
-        === 'devotionals') loadDevotionals(); }; // Load dashboard async function loadDashboard() { try { const [events, groups, devotionals] = await Promise.all([ EventsAPI.getAll(null, null, 1, 1000), GroupsAPI.getAll(null, 1, 1000), RhapsodyAPI.getAll(null,
-        1, 1000) ]); document.getElementById('eventCount').textContent = events.pagination.total; document.getElementById('groupCount').textContent = groups.pagination.total; document.getElementById('devotionalCount').textContent = devotionals.pagination.total;
-        // Calculate total members const totalMembers = groups.data.reduce((sum, g) => sum + (g.memberCount || 0), 0); document.getElementById('totalMembers').textContent = totalMembers; } catch (error) { console.error('Dashboard load error:', error);
-        } } // Events function setupEventForm() { document.getElementById('eventForm').addEventListener('submit', async (e) => { e.preventDefault(); try { await EventsAPI.create({ title: document.getElementById('eventTitle').value, date: document.getElementById('eventDate').value,
-        time: document.getElementById('eventTime').value, location: document.getElementById('eventLocation').value, description: document.getElementById('eventDescription').value, type: document.getElementById('eventType').value }); showAlert('eventAlert',
-        'Event created successfully!', 'success'); e.target.reset(); loadEvents(); loadDashboard(); } catch (error) { showAlert('eventAlert', error.message, 'error'); } }); } async function loadEvents() { try { const response = await EventsAPI.getAll(null,
-        null, 1, 100); const container = document.getElementById('eventsList'); if (response.data.length === 0) { container.innerHTML = `
-        <div class="empty-state"><i class="fas fa-inbox"></i>
-            <p>No events yet</p>
-        </div>`; return; } container.innerHTML = `
-        <div class="table-header">
-            <div>Title</div>
-            <div>Date</div>
-            <div>Location</div>
-            <div>Type</div>
-            <div>Actions</div>
-        </div>
-        ${response.data.map(event => `
-        <div class="table-row">
-            <div>${event.title}</div>
-            <div>${new Date(event.date).toLocaleDateString()}</div>
-            <div>${event.location}</div>
-            <div><strong>${event.type}</strong></div>
-            <div class="actions">
-                <button class="btn-action btn-delete" onclick="deleteEvent('${event._id}')">Delete</button>
-            </div>
-        </div>
-        `).join('')} `; } catch (error) { console.error('Load events error:', error); } } window.deleteEvent = async function(id) { if (confirm('Delete this event?')) { try { await EventsAPI.delete(id); showAlert('eventAlert', 'Event deleted successfully!', 'success');
-        loadEvents(); loadDashboard(); } catch (error) { showAlert('eventAlert', error.message, 'error'); } } }; // Groups function setupGroupForm() { document.getElementById('groupForm').addEventListener('submit', async (e) => { e.preventDefault(); try
-        { await GroupsAPI.create({ name: document.getElementById('groupName').value, leader: document.getElementById('groupLeader').value, location: document.getElementById('groupLocation').value, meetingTime: document.getElementById('groupMeeting').value,
-        description: document.getElementById('groupDescription').value }); showAlert('groupAlert', 'Group created successfully!', 'success'); e.target.reset(); loadGroups(); loadDashboard(); } catch (error) { showAlert('groupAlert', error.message, 'error');
-        } }); } async function loadGroups() { try { const response = await GroupsAPI.getAll(null, 1, 100); const container = document.getElementById('groupsList'); if (response.data.length === 0) { container.innerHTML = `
-        <div class="empty-state"><i class="fas fa-users"></i>
-            <p>No groups yet</p>
-        </div>`; return; } container.innerHTML = `
-        <div class="table-header">
-            <div>Name</div>
-            <div>Leader</div>
-            <div>Location</div>
-            <div>Members</div>
-            <div>Actions</div>
-        </div>
-        ${response.data.map(group => `
-        <div class="table-row">
-            <div>${group.name}</div>
-            <div>${group.leader}</div>
-            <div>${group.location}</div>
-            <div>${group.memberCount || 0}</div>
-            <div class="actions">
-                <button class="btn-action btn-delete" onclick="deleteGroup('${group._id}')">Delete</button>
-            </div>
-        </div>
-        `).join('')} `; } catch (error) { console.error('Load groups error:', error); } } window.deleteGroup = async function(id) { if (confirm('Delete this group?')) { try { await GroupsAPI.delete(id); showAlert('groupAlert', 'Group deleted successfully!', 'success');
-        loadGroups(); loadDashboard(); } catch (error) { showAlert('groupAlert', error.message, 'error'); } } }; // Devotionals function setupDevotionalForm() { document.getElementById('devotionalForm').addEventListener('submit', async (e) => { e.preventDefault();
-        try { const formData = new FormData(); formData.append('title', document.getElementById('devTitle').value); formData.append('scripture', document.getElementById('devScripture').value); formData.append('message', document.getElementById('devMessage').value);
-        formData.append('author', document.getElementById('devAuthor').value); if (document.getElementById('devImage').files[0]) { formData.append('image', document.getElementById('devImage').files[0]); } if (document.getElementById('devAudio').files[0])
-        { formData.append('audio', document.getElementById('devAudio').files[0]); } await RhapsodyAPI.create(formData); showAlert('devotionalAlert', 'Devotional posted successfully!', 'success'); e.target.reset(); loadDevotionals(); loadDashboard(); }
-        catch (error) { showAlert('devotionalAlert', error.message, 'error'); } }); } async function loadDevotionals() { try { const response = await RhapsodyAPI.getAll(null, 1, 100); const container = document.getElementById('devotionalsList'); if (response.data.length
-        === 0) { container.innerHTML = `
-        <div class="empty-state"><i class="fas fa-book"></i>
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"; import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"; import { getFirestore, addDoc, collection, getDocs,
+        deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"; // Firebase configuration const firebaseConfig = { apiKey: "AIzaSyDqzK38p9dG5YriZz3y66yDrmNjSeyGSas", authDomain: "paters-group.firebaseapp.com",
+        projectId: "paters-group", storageBucket: "paters-group.firebasestorage.app", messagingSenderId: "548925676619", appId: "1:548925676619:web:b1ea6edb5d0f12c49641ce", measurementId: "G-7QQ4M1CSWZ" }; // Initialize Firebase const firebaseApp = initializeApp(firebaseConfig);
+        const auth = getAuth(firebaseApp); const db = getFirestore(firebaseApp); // Check authentication window.addEventListener('load', () => { onAuthStateChanged(auth, (user) => { if (!user) { window.location.href = 'admin-login.html'; return; } loadDashboard();
+        setupDevotionalForm(); }); }); // Show section window.showSection = function(sectionId) { document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active')); document.getElementById(sectionId).classList.add('active'); document.querySelectorAll('.menu-item').forEach(m
+        => m.classList.remove('active')); event.target.closest('.menu-item').classList.add('active'); const titles = { dashboard: 'Dashboard', events: 'Manage Events', groups: 'Manage Groups', devotionals: 'Post Devotionals' }; document.getElementById('pageTitle').textContent
+        = titles[sectionId]; if (sectionId === 'devotionals') loadDevotionals(); }; // Load dashboard async function loadDashboard() { try { const devotionalsSnap = await getDocs(collection(db, "rhapsody")); document.getElementById('devotionalCount').textContent
+        = devotionalsSnap.size; } catch (error) { console.error('Dashboard load error:', error); } } // Setup Devotional Form with Firebase function setupDevotionalForm() { const form = document.getElementById('devotionalForm'); if (!form) return; form.addEventListener('submit',
+        async (e) => { e.preventDefault(); try { const user = auth.currentUser; if (!user) { showAlert('devotionalAlert', 'Not authenticated', 'danger'); return; } // Prepare devotional data const devotionalData = { title: document.getElementById('devTitle').value,
+        scripture: document.getElementById('devScripture').value, message: document.getElementById('devMessage').value, author: document.getElementById('devAuthor').value || 'Man of God', createdBy: user.uid, createdAt: new Date(), date: new Date() };
+        // Add to Firestore await addDoc(collection(db, "rhapsody"), devotionalData); showAlert('devotionalAlert', 'Devotional posted successfully!', 'success'); e.target.reset(); loadDevotionals(); loadDashboard(); } catch (error) { showAlert('devotionalAlert',
+        error.message || 'Failed to post devotional', 'danger'); console.error('Error:', error); } }); } // Load devotionals from Firestore async function loadDevotionals() { try { const q = query(collection(db, "rhapsody"), orderBy("createdAt", "desc"));
+        const querySnapshot = await getDocs(q); const container = document.getElementById('devotionalsList'); if (querySnapshot.empty) { container.innerHTML = `
+        <div class="empty-state">
+            <i class="fas fa-book"></i>
             <p>No devotionals yet</p>
         </div>`; return; } container.innerHTML = `
         <div class="table-header">
@@ -720,19 +671,19 @@
             <div>Date</div>
             <div>Actions</div>
         </div>
-        ${response.data.map(dev => `
+        ${Array.from(querySnapshot.docs).map(doc => { const dev = doc.data(); const dateStr = dev.createdAt?.toDate ? dev.createdAt.toDate().toLocaleDateString() : new Date(dev.date).toLocaleDateString(); return `
         <div class="table-row">
             <div>${dev.title}</div>
             <div>${dev.scripture}</div>
-            <div>${new Date(dev.date).toLocaleDateString()}</div>
+            <div>${dateStr}</div>
             <div class="actions">
-                <button class="btn-action btn-delete" onclick="deleteDevotion al('${dev._id}')">Delete</button>
+                <button class="btn-action btn-delete" onclick="deleteDevotional('${doc.id}')">Delete</button>
             </div>
-        </div>
-        `).join('')} `; } catch (error) { console.error('Load devotionals error:', error); } } window.deleteDevotional = async function(id) { if (confirm('Delete this devotional?')) { try { await RhapsodyAPI.delete(id); showAlert('devotionalAlert', 'Devotional
-        deleted successfully!', 'success'); loadDevotionals(); loadDashboard(); } catch (error) { showAlert('devotionalAlert', error.message, 'error'); } } }; // Utilities function showAlert(elementId, message, type) { const alert = document.getElementById(elementId);
-        alert.className = `alert show alert-${type}`; alert.textContent = message; setTimeout(() => alert.classList.remove('show'), 4000); } window.logout = function() { clearToken(); window.location.href = 'admin-login.html'; }; window.toggleTheme =
-        function() { document.body.classList.toggle('dark-mode'); };
+        </div>`; }).join('')} `; } catch (error) { console.error('Load devotionals error:', error); } } // Delete devotional window.deleteDevotional = async function(id) { if (confirm('Delete this devotional?')) { try { await deleteDoc(doc(db, "rhapsody", id));
+        showAlert('devotionalAlert', 'Devotional deleted successfully!', 'success'); loadDevotionals(); loadDashboard(); } catch (error) { showAlert('devotionalAlert', error.message || 'Failed to delete', 'danger'); } } }; // Utility: Show alert function
+        showAlert(elementId, message, type) { const alert = document.getElementById(elementId); if (!alert) return; alert.className = `alert show alert-${type}`; alert.textContent = message; setTimeout(() => alert.classList.remove('show'), 4000); } //
+        Logout window.logout = async function() { try { await signOut(auth); window.location.href = 'admin-login.html'; } catch (error) { console.error('Logout error:', error); } }; // Toggle theme window.toggleTheme = function() { document.body.classList.toggle('dark-mode');
+        };
     </script>
 </body>
 
